@@ -36,6 +36,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', [])
 
 INSTALLED_APPS = [
     'website.apps.WebsiteConfig',
+    'locations.apps.LocationsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
