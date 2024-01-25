@@ -14,3 +14,10 @@ def service(request):
     context = {}
     render_page = template.render(context, request)
     return HttpResponse(render_page)
+
+def basehtml(request):
+    template = loader.get_template('base.html')
+    context = {}
+    render_page = template.render(context, request)
+    return HttpResponse(render_page)
+
