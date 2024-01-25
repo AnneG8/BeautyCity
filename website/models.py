@@ -1,58 +1,72 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin, AbstractUser,
+                                        Group, Permission)
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 from locations.models import Location
+from .managers import ClientManager
 
 
-class Client(models.Model):
-    first_name = models.CharField(
-        'Имя',
-        max_length=50,
-        null=True,
-        blank=True
+class Client(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(
+        'имя пользователя',
+        max_length=50
     )
-    last_name = models.CharField(
-        'Фамилия',
-        max_length=70,
-        null=True,
-        blank=True
-    )
-    phonenumber = PhoneNumberField(
+    phone_number = PhoneNumberField(
         'Телефон',
         region='RU',
         unique=True
     )
+    is_active = models.BooleanField('активен', default=True)
+    # is_staff = models.BooleanField(default=False)
+    is_verified = models.BooleanField('подтвержден', default=False)
+
+    groups = models.ManyToManyField(
+        Group,
+        related_query_name='client_group'
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_query_name='client_user_permission'
+    )
+
+    objects = ClientManager()
+
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = 'клиент'
+        verbose_name_plural = 'клиенты'
+
+    def __str__(self):
+        return self.username
 
 
 class Employee(models.Model):
     first_name = models.CharField(
         'Имя',
-        max_length=50,
-        null=True,
-        blank=True
+        max_length=50
     )
     last_name = models.CharField(
         'Фамилия',
-        max_length=70,
-        null=True,
-        blank=True
+        max_length=70
     )
     specialties = models.ManyToManyField(
         'Speciality',
         verbose_name='сотрудники',
         related_name='employees',
     )
-    salon = models.ForeignKey(
-        'Salon',
-        verbose_name='сотрудники',
-        related_name='employees',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
     # поиск по имени+фамилии
+
+    class Meta:
+        verbose_name = 'работник'
+        verbose_name_plural = 'работники'
+
+    def __str__(self):
+        return f'{self.last_name} {self.first_name}'
 
 
 class Salon(models.Model):
@@ -72,6 +86,16 @@ class Salon(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    employees = models.ManyToManyField(
+        Employee,
+        through='TimeSlot',
+        related_name='orders',
+        verbose_name='работники',
+    )
+
+    class Meta:
+        verbose_name = 'салон'
+        verbose_name_plural = 'салоны'
 
     def __str__(self):
         return self.name
@@ -95,6 +119,13 @@ class Service(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        verbose_name = 'услуга'
+        verbose_name_plural = 'услуги'
+
+    def __str__(self):
+        return self.name
+
 
 class Speciality(models.Model):
     name = models.CharField(
@@ -102,8 +133,28 @@ class Speciality(models.Model):
         max_length=40
     )
 
+    class Meta:
+        verbose_name = 'специальность'
+        verbose_name_plural = 'специальности'
+
+    def __str__(self):
+        return self.name
+
 
 class TimeSlot(models.Model):
+    employee = models.ForeignKey(
+        'Employee',
+        verbose_name='мастер',
+        related_name='time_slots',
+        on_delete=models.CASCADE,
+    )
+    salon = models.ForeignKey(
+        'Salon',
+        verbose_name='салон',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     start_time = models.DateTimeField('начало')
     end_time = models.DateTimeField('конец')
     is_available = models.BooleanField(
@@ -112,17 +163,18 @@ class TimeSlot(models.Model):
         db_index=True
     )
 
+    class Meta:
+        verbose_name = 'слот времени'
+        verbose_name_plural = 'слоты времени'
+
+    def __str__(self):
+        return f'{self.start_time.strftime("%d.%m.%y %H:%M")}, {self.employee}'
+
 
 class Appointment(models.Model):
     client = models.ForeignKey(
         'Client',
         verbose_name='клиент',
-        related_name='appts',
-        on_delete=models.CASCADE,
-    )
-    employee = models.ForeignKey(
-        'Employee',
-        verbose_name='мастер',
         related_name='appts',
         on_delete=models.CASCADE,
     )
@@ -148,6 +200,13 @@ class Appointment(models.Model):
         on_delete=models.SET_NULL
     )
 
+    class Meta:
+        verbose_name = 'запись'
+        verbose_name_plural = 'записи'
+
+    def __str__(self):
+        return f'Запись от {self.start_time.strftime("%d.%m.%y %H:%M")}, {self.service}'
+
 
 class Payment(models.Model):
     cost = models.DecimalField(
@@ -161,8 +220,19 @@ class Payment(models.Model):
         'оплачен',
         default=False
     )
+    open_date = models.DateTimeField(
+        'дата создания',
+        default=timezone.now
+    )
     paid_date = models.DateTimeField(
         'дата оплаты',
         null=True,
         blank=True
     )
+
+    class Meta:
+        verbose_name = 'платёж'
+        verbose_name_plural = 'платежи'
+
+    def __str__(self):
+        return f'Чек №{self.id} на сумму , {self.start_time.strftime("%d.%m.%y %H:%M")}, '
