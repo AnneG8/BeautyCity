@@ -21,6 +21,9 @@ from website import views
 urlpatterns = [
     path('', views.main, name='main'),
     path('service', views.service, name='service'),
+    path('serviceFinally', views.serviceFinally, name='serviceFinally'),
+    path('manager', views.manager, name='manager'),
+    path('manager/notes', views.notes, name='managers-notes'),
     path('base', views.basehtml, name='base'),
     path('web-admin/', admin.site.urls),
 

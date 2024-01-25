@@ -8,16 +8,18 @@ from django.http import HttpResponse
 def main(request):
     return render(request, 'index.html')
 
+def manager(request):
+    return render(request, 'manager-ui.html')
+
+def notes(request):
+    return render(request, 'notes.html')
 
 def service(request):
-    template = loader.get_template('service.html')
-    context = {}
-    render_page = template.render(context, request)
-    return HttpResponse(render_page)
+    return render(request, 'service.html')
+
+
+def serviceFinally(request):
+    return render(request, 'serviceFinally.html')
 
 def basehtml(request):
-    template = loader.get_template('base.html')
-    context = {}
-    render_page = template.render(context, request)
-    return HttpResponse(render_page)
-
+    return render (request, 'base.html')
