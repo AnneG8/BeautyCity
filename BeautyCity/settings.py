@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'phonenumber_field',
     'rest_framework',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -92,27 +93,23 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+AUTH_PASSWORD_VALIDATORS = []
 
-# AUTH_USER_MODEL = 'website.Client'
+AUTH_USER_MODEL = 'website.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
     'website.backends.PhoneAuthBackend',
     # 'django.contrib.auth.backends.ModelBackend'
 ]
+
+DJOSER = {
+    'SEND_CONFIRMATION_EMAIL': False,
+    'SEND_ACTIVATION_EMAIL': False,
+    'SEND_ACTIVATION_SMS': True,
+    'PHONE_CONFIRMATION': {
+        'code_length': 4,
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

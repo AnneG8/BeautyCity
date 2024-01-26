@@ -6,10 +6,10 @@ from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 from locations.models import Location
-from .managers import ClientManager
+from .managers import CustomUserManager
 
 
-class Client(AbstractBaseUser, PermissionsMixin):
+class CustomUser(AbstractUser):
     username = models.CharField(
         'имя пользователя',
         max_length=50
@@ -19,23 +19,14 @@ class Client(AbstractBaseUser, PermissionsMixin):
         region='RU',
         unique=True
     )
-    is_active = models.BooleanField('активен', default=True)
-    # is_staff = models.BooleanField(default=False)
+    email = None
+
     is_verified = models.BooleanField('подтвержден', default=False)
 
-    groups = models.ManyToManyField(
-        Group,
-        related_query_name='client_group'
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_query_name='client_user_permission'
-    )
-
-    objects = ClientManager()
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = [phone_number]
 
     class Meta:
         verbose_name = 'клиент'
@@ -43,6 +34,9 @@ class Client(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        raise NotImplementedError("email_user() method is not supported in CustomUser.")
 
 
 class Employee(models.Model):
@@ -173,7 +167,7 @@ class TimeSlot(models.Model):
 
 class Appointment(models.Model):
     client = models.ForeignKey(
-        'Client',
+        'CustomUser',
         verbose_name='клиент',
         related_name='appts',
         on_delete=models.CASCADE,

@@ -2,7 +2,7 @@ from django.contrib.auth.models import BaseUserManager
 from phonenumber_field.phonenumber import PhoneNumber
 
 
-class ClientManager(BaseUserManager):
+class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, phone_number, username=None, password=None,

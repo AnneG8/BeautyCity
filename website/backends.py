@@ -1,22 +1,29 @@
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
-from django.db.models import Q
+from phonenumber_field.phonenumber import PhoneNumber
 
-from website.models import Client
+from website.models import CustomUser, CustomUserManager
 
-#User = get_user_model()
+UserModel = get_user_model()
 
 class PhoneAuthBackend(ModelBackend):
     def get_user(self, user_id):
         try:
-            return Client.objects.get(pk=user_id)
-        except Client.DoesNotExist:
+            return CustomUser.objects.get(pk=user_id)
+        except CustomUser.DoesNotExist:
             return None
 
-    def authenticate(self, request, phone_number=None, **kwargs):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        if username is None:
+            username = kwargs.get(UserModel.USERNAME_FIELD)
+        if username is None:
+            return
         try:
-            client = Client.objects.get(Q(phone_number=phone_number))
-        except Client.DoesNotExist:
-            return None
+            phone_number = PhoneNumber.from_string(username, 'RU')
+            user = CustomUser.objects.get(phone_number=phone_number)
+        except CustomUser.DoesNotExist:
+            return
 
-        return client
+        if (user.password is None or user.check_password(password)) \
+                and self.user_can_authenticate(user):
+            return user

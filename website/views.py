@@ -12,4 +12,7 @@ def login_client(request):
 @api_view(['POST'])
 def register_client(request):
     # form = PhoneRegistrationForm(request.data)
+    # if form.is_valid():
+    #     form.save()
+    pass
 
