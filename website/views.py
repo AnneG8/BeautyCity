@@ -7,3 +7,6 @@ def main_page(request):
 
 def service(request):
     return render(request, 'service.html')
+
+def base_page(request):
+    return render(request, 'base.html')
