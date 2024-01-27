@@ -1,5 +1,4 @@
 from random import randint
-
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -61,3 +60,15 @@ def confirm_phone(request):
 @login_required
 def view_profile(request, user_id):
     pass
+
+
+def main_page(request):
+    return render(request, 'index.html')
+
+
+def service(request):
+    return render(request, 'service.html')
+
+
+# def base_page(request):
+#     return render(request, 'base.html')

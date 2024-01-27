@@ -6,6 +6,10 @@ urlpatterns = [
     path('auth/', views.auth, name='auth'),
     path('confirm_phone/', views.confirm_phone, name='confirm_phone'),
     path('profile/<int:user_id>/', views.view_profile, name='profile'),
-    # path('auth/', include('djoser.registration.urls')),
+
+    path('', views.main_page, name="index"),
+    path('service/', views.service, name='service'),
+    # path('base', views.base_page, name='base'),
+
     path('api-auth/', include('rest_framework.urls')),
 ]
