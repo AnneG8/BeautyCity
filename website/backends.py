@@ -2,7 +2,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 from phonenumber_field.phonenumber import PhoneNumber
 
-from website.models import CustomUser, CustomUserManager
+from .models import CustomUser, CustomUserManager
 
 UserModel = get_user_model()
 
@@ -24,6 +24,6 @@ class PhoneAuthBackend(ModelBackend):
         except CustomUser.DoesNotExist:
             return
 
-        if (user.password is None or user.check_password(password)) \
-                and self.user_can_authenticate(user):
-            return user
+        # if (user.password is None or user.check_password(password)) \
+        #         and self.user_can_authenticate(user):
+        return user

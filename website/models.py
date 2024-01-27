@@ -15,12 +15,17 @@ class CustomUser(AbstractUser):
         max_length=50
     )
     phone_number = PhoneNumberField(
-        'Телефон',
+        'телефон',
         region='RU',
         unique=True
     )
     email = None
 
+    verification_code = models.PositiveIntegerField(
+        'код подтверждения',
+        blank=True,
+        null=True
+    )
     is_verified = models.BooleanField('подтвержден', default=False)
 
     objects = CustomUserManager()

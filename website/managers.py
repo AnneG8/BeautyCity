@@ -13,8 +13,9 @@ class CustomUserManager(BaseUserManager):
         if not phonenumber.is_valid():
             raise ValueError(f'Invalid phone number: {phone_number}')
 
+        phone_number = phonenumber.as_e164
         if not username:
-            username = phonenumber.as_e164
+            username = phone_number
 
         user = self.model(
             username=username,
