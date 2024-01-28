@@ -23,10 +23,11 @@ def auth(request):
         if not user:
             user = CustomUser.objects.create_user(phone_number=phone_number)
 
-        user.verification_code = randint(1000, 9999) #придумать генерацию получше
+        # user.verification_code = randint(1000, 9999) #придумать генерацию получше
+        user.verification_code = 5432
         user.is_verified = False
         user.save()
-        #send_code(user.phone_number.as_e164, user.verification_code)
+        # send_code(user.phone_number.as_e164, user.verification_code)
         return render(request, 'validate.html', {'phone_number': phone_number})
     return render(request, 'auth.html')
 
