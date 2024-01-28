@@ -76,6 +76,9 @@ class Employee(models.Model):
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
 
+    def get_work_experience(self):
+        return timezone.now().date() - self.emp_day
+
 
 class Salon(models.Model):
     name = models.CharField(
