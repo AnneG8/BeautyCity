@@ -58,6 +58,9 @@ class Employee(models.Model):
         verbose_name='сотрудники',
         related_name='employees',
     )
+    emp_day = models.DateField(
+        'день трудоустройства'
+    )
     # поиск по имени+фамилии
 
     class Meta:
