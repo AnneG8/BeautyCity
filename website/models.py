@@ -1,6 +1,6 @@
 from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin, AbstractUser,
                                         Group, Permission)
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
@@ -13,6 +13,17 @@ class CustomUser(AbstractUser):
     username = models.CharField(
         'имя пользователя',
         max_length=50
+    )
+    photo = models.FileField(
+        'фото',
+        upload_to='avatars/',
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=['svg', 'jpeg', 'jpg', 'png']
+            )
+        ],
+        null=True,
+        blank=True
     )
     phone_number = PhoneNumberField(
         'телефон',
@@ -53,8 +64,14 @@ class Employee(models.Model):
         'Фамилия',
         max_length=70
     )
-    photo = models.ImageField(
+    photo = models.FileField(
         'фото',
+        upload_to='employees/',
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=['svg', 'jpeg', 'jpg', 'png']
+            )
+        ],
         null=True,
         blank=True
     )
@@ -92,13 +109,24 @@ class Salon(models.Model):
         'название',
         max_length=50
     )
+    city = models.CharField(
+        'город',
+        max_length=30,
+        blank=True,
+    )
     address = models.CharField(
         'адрес',
         max_length=100,
         blank=True,
     )
-    image = models.ImageField(
+    image = models.FileField(
         'изображение',
+        upload_to='salons/',
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=['svg', 'jpeg', 'jpg', 'png']
+            )
+        ],
         null=True,
         blank=True
     )
@@ -129,8 +157,14 @@ class Service(models.Model):
         'название',
         max_length=70
     )
-    image = models.ImageField(
+    image = models.FileField(
         'изображение',
+        upload_to='services/',
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=['svg', 'jpeg', 'jpg', 'png']
+            )
+        ],
         null=True,
         blank=True
     )
