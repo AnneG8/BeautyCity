@@ -71,5 +71,11 @@ def service(request):
     return render(request, 'service.html')
 
 
+def popup_login_page(request):
+    return render(request, 'popupLogin.html')
+
+def popup_tip_page(request):
+    return render(request, 'popupTip.html')
+
 # def base_page(request):
 #     return render(request, 'base.html')

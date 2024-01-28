@@ -9,6 +9,9 @@ urlpatterns = [
 
     path('', views.main_page, name="index"),
     path('service/', views.service, name='service'),
+    path('popup-login/',views.popup_login_page, name='popup-login'),
+    path('popup-tip/', views.popup_tip_page, name='popup-tip'),
+
     # path('base', views.base_page, name='base'),
 
     path('api-auth/', include('rest_framework.urls')),
