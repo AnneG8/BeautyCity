@@ -59,7 +59,8 @@ class Employee(models.Model):
         related_name='employees',
     )
     emp_day = models.DateField(
-        'день трудоустройства'
+        'день трудоустройства',
+        default=timezone.now().date().isoformat()
     )
     # поиск по имени+фамилии
 
