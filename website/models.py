@@ -78,6 +78,11 @@ class Salon(models.Model):
         max_length=100,
         blank=True,
     )
+    image = models.ImageField(
+        'изображение',
+        null=True,
+        blank=True
+    )
     coordinates = models.ForeignKey(
         Location,
         verbose_name='локация',
