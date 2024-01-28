@@ -31,7 +31,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = [phone_number]
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = 'клиент'
@@ -60,6 +60,7 @@ class Employee(models.Model):
     )
     specialties = models.ManyToManyField(
         'Speciality',
+        through='Employee_Speciality',
         verbose_name='сотрудники',
         related_name='employees',
     )
@@ -76,8 +77,14 @@ class Employee(models.Model):
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
 
-    def get_work_experience(self):
+    @property
+    def work_experience(self):
         return timezone.now().date() - self.emp_day
+
+
+class Employee_Speciality(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    speciality = models.ForeignKey('Speciality', on_delete=models.CASCADE)
 
 
 class Salon(models.Model):
@@ -105,7 +112,7 @@ class Salon(models.Model):
     employees = models.ManyToManyField(
         Employee,
         through='TimeSlot',
-        related_name='orders',
+        related_name='salons',
         verbose_name='работники',
     )
 
