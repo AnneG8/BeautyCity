@@ -53,6 +53,11 @@ class Employee(models.Model):
         'Фамилия',
         max_length=70
     )
+    photo = models.ImageField(
+        'фото',
+        null=True,
+        blank=True
+    )
     specialties = models.ManyToManyField(
         'Speciality',
         verbose_name='сотрудники',
@@ -113,6 +118,11 @@ class Service(models.Model):
     name = models.CharField(
         'название',
         max_length=70
+    )
+    image = models.ImageField(
+        'изображение',
+        null=True,
+        blank=True
     )
     price = models.DecimalField(
         'цена',
