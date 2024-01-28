@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 
 from .backends import PhoneAuthBackend
-from .models import CustomUser
+from .models import CustomUser, Salon, Service, Employee
 from .serializers import PhoneSerializer, VCodeSerializer
 from .utils.smscenter import send_code
 
@@ -63,7 +63,29 @@ def view_profile(request, user_id):
     pass
 
 
+def serialize_employee(employee: Employee):
+    return {
+        'id': employee.id,
+        'full_name': employee.__str__(),
+        'photo': employee.photo.url if employee.photo else None,
+        'speciality': employee.specialties.first(),
+        'wexp': {
+            'years': employee.work_experience.years,
+            'months': employee.work_experience.months
+        }
+    }
+
+
 def main_page(request):
+    salons = Salon.objects.all()
+    employees = Employee.objects.filter(specialties__isnull=False)
+    services = Service.objects.all()
+
+    context = {
+        'salons': salons,
+        'services': services,
+        'employees': [serialize_employee(employee) for employee in employees],
+    }
     return render(request, 'index.html')
 
 
