@@ -376,10 +376,34 @@ $(document).ready(function() {
 	//popup
 	$('.header__block_auth').click(function(e) {
 		e.preventDefault()
-		$('#authModal').arcticmodal();
+		$('#authModal').arcticmodal({
+            afterOpen: function(data, el) {
+                let phoneInput = $("#phone")[0]; // Получаем DOM-элемент из jQuery-объекта
+                phoneInput.focus();
+                phoneInput.setSelectionRange(3, 3);
+            }
+        });
 		// $('#confirmModal').arcticmodal();
-
 	})
+
+    $("#phone").on("input", function() {
+        let inputPhone = document.getElementById("phone"); //$("#phone");
+        let patStringArr = "+7(___)___-__-__".split('');
+        let arrPush = [3, 4, 5, 7, 8, 9, 11, 12, 14, 15]
+        let val = inputPhone.value;
+        let arr = val.replace(/\D+/g, "").split('').splice(1);
+        let n;
+        let ni;
+        arr.forEach((s, i) => {
+            n = arrPush[i];
+            patStringArr[n] = s
+            ni = i
+        });
+        //arr.length < 10 ? inputPhone.css("color", "red") : inputPhone.css("color", "green");
+        arr.length < 10 ? inputPhone.style.color = 'red' : inputPhone.style.color = 'green';
+        inputPhone.value = patStringArr.join('');
+        n ? inputPhone.setSelectionRange(n + 1, n + 1) : inputPhone.setSelectionRange(17, 17)
+    })
 
 	$('.rewiewPopupOpen').click(function(e) {
 		e.preventDefault()
@@ -395,7 +419,9 @@ $(document).ready(function() {
 	})
 	
 	$('.authPopup__form').submit(function() {
+	    var phoneNumber = $('#phone').val();
 		$('#confirmModal').arcticmodal();
+		$('#confirmModal .popup__text').text('Введите код, полученный по SMS на номер ' + phoneNumber);
 		return false
 	})
 

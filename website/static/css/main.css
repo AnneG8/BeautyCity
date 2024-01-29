@@ -1911,6 +1911,7 @@ text-align: left;
 }
 .confirmPopup {
 	padding-left: 51px;
+	padding-right: 51px;
 }
 .tipsPopup {
 	width: 331px;

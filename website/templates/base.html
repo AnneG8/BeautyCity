@@ -89,9 +89,6 @@
 					</div>
 					</div>
 				</div>
-
-
-
 			</div>
 		</div>
 	</header>
@@ -176,7 +173,7 @@
 			<p class="popup__text authPopup__text">Введите свой номер телефона, мы вышлем на него код</p>
 			<form action="#" class="authPopup__form">
 				<div class="contacts__form_inputBlock">
-					<input type="text" name="tel" class="contacts__form_iunput" placeholder="+7(999)999--99-99" required="">
+					<input type="tel" name="phone" id="phone" value="+7(___)___-__-__" class="contacts__form_iunput" required="">
 				</div>
 				<div class="contacts__form_checkboxBlock fic">
 					<input type="checkbox" class="contacts__form_checkbox" checked="">
@@ -190,7 +187,7 @@
 		<div class="box-modal confirmPopup popup" id="confirmModal">
 			<div class="box-modal_close arcticmodal-close"><img src="{% static 'img/x.svg' %}" alt="x"></div>
 			<div class="popup__title confirmPopup__title">Подтвердите номер</div>
-			<p class="popup__text confirmPopup__text">Введите код, полученный по SMS на номер +7 (928) 164 48 60</p>
+			<p class="popup__text confirmPopup__text">Введите код, полученный по SMS</p>
 			<div class="confirmPopup__number">
 				<input type="text" name="num1" class="tipsPopup__form_inputNum popup__input" placeholder="" required="">
 				<input type="text" name="num2" class="tipsPopup__form_inputNum popup__input" placeholder="" required="">
