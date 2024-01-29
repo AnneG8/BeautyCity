@@ -86,7 +86,7 @@ def main_page(request):
         'services': services,
         'employees': [serialize_employee(employee) for employee in employees],
     }
-    return render(request, 'index.html')
+    return render(request, 'index.html', context)
 
 
 def service(request):
