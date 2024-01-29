@@ -378,16 +378,17 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('#authModal').arcticmodal({
             afterOpen: function(data, el) {
-                let phoneInput = $("#phone")[0]; // Получаем DOM-элемент из jQuery-объекта
+                let phoneInput = $("#phone")[0];
                 phoneInput.focus();
                 phoneInput.setSelectionRange(3, 3);
             }
         });
-		// $('#confirmModal').arcticmodal();
 	})
 
     $("#phone").on("input", function() {
         let inputPhone = document.getElementById("phone"); //$("#phone");
+        let submitButton = $(".popup__btn.authPopup__btn");
+
         let patStringArr = "+7(___)___-__-__".split('');
         let arrPush = [3, 4, 5, 7, 8, 9, 11, 12, 14, 15]
         let val = inputPhone.value;
@@ -399,8 +400,16 @@ $(document).ready(function() {
             patStringArr[n] = s
             ni = i
         });
+
         //arr.length < 10 ? inputPhone.css("color", "red") : inputPhone.css("color", "green");
-        arr.length < 10 ? inputPhone.style.color = 'red' : inputPhone.style.color = 'green';
+        //arr.length < 10 ? inputPhone.style.color = 'red' : inputPhone.style.color = 'green';
+        if (arr.length < 10) {
+            inputPhone.style.color = 'red';
+            submitButton.prop('disabled', true);
+        } else {
+            inputPhone.style.color = 'green';
+            submitButton.prop('disabled', false);
+        }
         inputPhone.value = patStringArr.join('');
         n ? inputPhone.setSelectionRange(n + 1, n + 1) : inputPhone.setSelectionRange(17, 17)
     })

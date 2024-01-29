@@ -1866,14 +1866,19 @@ color: #323232;
 }
 .popup__btn {
 	background: #FFCD07;
-border-radius: 5px;
-font-weight: 600;
-font-size: 18px;
-line-height: 127.52%;
-/* identical to box height, or 23px */
-border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 127.52%;
+    /* identical to box height, or 23px */
+    border: none;
 
-color: #FFFFFF;
+    color: #FFFFFF;
+}
+.popup__btn:disabled {
+    background: #CCCCCC;
+    color: #666666;
+    cursor: not-allowed;
 }
 .authPopup__btn {
 width: 306px;
